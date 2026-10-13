@@ -22,8 +22,12 @@ exercises = [
     {
         "id": 4,
         "concept": "Tuple",
-        "prompt": "Create a Tuple and print a value inside it",
+        "prompt": "Create a tuple and print one of its values using an index.",
         "criteria": "The code creates a tuple and prints one of its values using a valid index.",
+        "explanation_prompt": (
+            "In your own words, how does an index select an item from a tuple, "
+            "and why does your chosen index select the item you print?"
+        ),
     },
     {
         "id": 5,

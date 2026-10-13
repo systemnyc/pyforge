@@ -43,20 +43,19 @@ def ask_model(system_prompt: str, user_prompt: str) -> str:
     return response.message.content
 
 def generate_reference(concept: str) -> str:
+    """Generate a reference explanation focused on the supplied question."""
+    system_prompt = (
+        "You explain Python concepts accurately in plain language. "
+        "Answer the supplied explanation question directly in two or three sentences. "
+        "If it refers to submitted code that you have not been given, explain "
+        "the general principle without inventing variable names or values. "
+        "For list or tuple indexing, explain that positive indexing starts "
+        "at zero and an index selects the item at that position. "
+        "Do not include code examples, questions, or Markdown formatting."
+    )
 
-    """Generate a reference explanation independently of a student's answer.
-
-            Args:
-                concept: The Python topic or explanation question to address.
-
-            Returns:
-                A model-generated explanation requested in three sentences,
-                without code examples or questions.
-    """
-    system_prompt = "Explain a Python topic accurately and simply, in three sentences, without code examples or questions."
-    user_prompt   = concept
-    
-    return ask_model(system_prompt=system_prompt, user_prompt=user_prompt)
+    return ask_model( system_prompt=system_prompt, user_prompt=concept,
+    )
 
 def grade_submission(system: str, user: str) -> str:
 
