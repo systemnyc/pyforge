@@ -1,0 +1,27 @@
+publish_dir=$(mktemp -d /home/charles/pyforge-publish.XXXXXX)
+cp -r src scripts README.md pyproject.toml uv.lock "$publish_dir/"
+cd "$publish_dir"
+
+cat > .gitignore <<'EOF'
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+data/
+docs_corpus/
+.ruff_cache/
+.pytest_cache/
+EOF
+
+git init -b main
+git add .
+git commit -m "Add PyForge MVP"
+git remote add origin https://github.com/systemnyc/pyforge.git
+git push -u origin mainwd
+.venv/
+.env
+__pycache__/
+.ruff_cache/
+data/

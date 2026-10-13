@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PyForge Feedback</title>
+</head>
+<body>
+    <h1>Your feedback</h1>
+    <div style="white-space: pre-wrap;">{{ feedback }}</div>
+
+    {% if hint %}
+    <section>
+        <h2>Related Python documentation</h2>
+        <div style="white-space: pre-wrap;">{{ hint.page_content }}</div>
+        <p>Source: {{ hint.metadata["source"] }}</p>
+    </section>
+    {% endif %}
+
+    <!-- Keep the experimental comparison collapsed by default. -->
+    <details>
+        <summary>Experimental comparison</summary>
+
+        {% if similarity is not none %}
+            <p>Semantic similarity: {{ "%.3f"|format(similarity) }}</p>
+            <p>
+                This compares wording and meaning.
+                It does not determine correctness or mastery.
+            </p>
+        {% else %}
+            <p>No explanation was provided, so no comparison was calculated.</p>
+        {% endif %}
+
+        <h3>AI reference explanation</h3>
+        <p>{{ reference }}</p>
+    </details>
+
+    <p>
+        <a href="/?exercise_id={{ exercise['id'] }}">Review this topic</a>
+    </p>
+
+    {% if exercise.get("next_exercise_id") %}
+    <p>
+        <a href="/?exercise_id={{ exercise['next_exercise_id'] }}">
+            Try a harder example
+        </a>
+    </p>
+    {% endif %}
+
+    <p><a href="/">Choose another topic</a></p>
+</body>
+</html>

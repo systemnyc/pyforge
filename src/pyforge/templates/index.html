@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PyForge</title>
+</head>
+<body>
+    <h1>Welcome to PyForge</h1>
+    <p>Your Python documentation workspace.</p>
+
+    <nav>
+        <h2>Choose an exercise</h2>
+        <ul>
+            {% for item in exercises %}
+            <li>
+                <a href="/?exercise_id={{ item['id'] }}">
+                    {{ item['id'] }} — {{ item['concept'] }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+
+    <h2>{{ exercise["concept"] }}</h2>
+    <p>{{ exercise["prompt"] }}</p>
+
+    <form action="/submit" method="post">
+        <label for="code">Enter Python code to review:</label>
+        <br>
+        <textarea
+            id="code"
+            name="code"
+            rows="10"
+            cols="70"
+            required
+        ></textarea>
+        <br>
+
+        <label for="explanation">
+            {{ exercise.get("explanation_prompt", "In your own words, what does your code do?") }}
+        </label>
+        <br>
+        <textarea
+            id="explanation"
+            name="explanation"
+            rows="4"
+            cols="60"
+        ></textarea>
+        <br>
+
+        <button type="submit">Review code</button>
+        <input
+            type="hidden"
+            name="exercise_id"
+            value="{{ exercise['id'] }}"
+        >
+
+        <p id="review-status" role="status" hidden>
+            Reviewing your code… Please wait.
+        </p>
+    </form>
+
+    <h2>Your previous attempts</h2>
+
+    {% for attempt in attempts %}
+    <article>
+        <h3>Attempt {{ attempt["id"] }}</h3>
+        <p>Submitted: {{ attempt["created_at"] }} UTC</p>
+        <pre>{{ attempt["code"] }}</pre>
+
+        {% if attempt["explanation"] %}
+        <p><strong>Your explanation:</strong></p>
+        <p style="white-space: pre-wrap;">{{ attempt["explanation"] }}</p>
+        {% endif %}
+
+        <p style="white-space: pre-wrap;">{{ attempt["feedback"] }}</p>
+
+        {% if attempt["similarity"] is not none %}
+        <!-- Keep experimental scores collapsed in attempt history. -->
+        <details>
+            <summary>Experimental comparison</summary>
+            <p>
+                Semantic similarity:
+                {{ "%.3f"|format(attempt["similarity"]) }}
+            </p>
+            <p>
+                This compares wording and meaning.
+                It does not determine correctness or mastery.
+            </p>
+            <h4>AI reference explanation</h4>
+            <p>{{ attempt["reference"] }}</p>
+        </details>
+        {% endif %}
+    </article>
+    {% else %}
+    <p>No attempts saved for this exercise yet.</p>
+    {% endfor %}
+
+    <script>
+        // Run after the form has been added to the page.
+        const reviewForm = document.querySelector('form[action="/submit"]');
+        const reviewButton = reviewForm.querySelector('button[type="submit"]');
+        const reviewStatus = document.getElementById("review-status");
+
+        // Prevent duplicate submissions and show progress.
+        reviewForm.addEventListener("submit", () => {
+            reviewButton.disabled = true;
+            reviewButton.textContent = "Reviewing your code…";
+            reviewStatus.hidden = false;
+            reviewForm.setAttribute("aria-busy", "true");
+        });
+
+        // Restore the form when returning with the browser's Back button.
+        window.addEventListener("pageshow", () => {
+            reviewButton.disabled = false;
+            reviewButton.textContent = "Review code";
+            reviewStatus.hidden = true;
+            reviewForm.removeAttribute("aria-busy");
+        });
+    </script>
+</body>
+</html>
