@@ -100,6 +100,15 @@ def submit_code(
 
     if not code.strip():
         return {"message": "Enter some Python code before submitting."}
+    
+    # Define exercise creation
+    exercise_prompt = (
+        """
+        Experience:
+        You are a python master and master trainer with training in cognative behavior, congnative learning methods.
+        Your role is to create python exercises based on the users leve. 
+        """
+    )
 
     # Define coaching instructions and an example of the desired hint style.
     system_prompt = (
