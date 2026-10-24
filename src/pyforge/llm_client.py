@@ -11,7 +11,27 @@ import os
 
 load_dotenv()
 
+def create_exercise(system_prompt: str) -> str:
+    """"
+        Sent instructions on generating python exercises
 
+        Args:
+            system_prompt: Instructions on creating python exercises
+        Returns:
+            The model's prompt exercise text.
+        
+    """
+
+    response: ChatResponse = chat(
+        model= os.getenv("OLLAMA_MODEL", "llama3.18b"),
+        messages=[
+            {"role": "system", "content": system_prompt},
+         
+        ], 
+        options = {
+            "temperature": 0,
+        },
+    )
 def ask_model(system_prompt: str, user_prompt: str) -> str:
     
     """Send system instructions and user content to the configured model.
