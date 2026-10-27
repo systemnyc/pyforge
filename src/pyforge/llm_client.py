@@ -12,7 +12,7 @@ import os
 load_dotenv()
 
 def create_exercise(system_prompt: str) -> str:
-    """"
+    """
         Sent instructions on generating python exercises
 
         Args:
@@ -23,7 +23,7 @@ def create_exercise(system_prompt: str) -> str:
     """
 
     response: ChatResponse = chat(
-        model= os.getenv("OLLAMA_MODEL", "llama3.18b"),
+        model=os.getenv("OLLAMA_MODEL", "llama3.1:8b"),
         messages=[
             {"role": "system", "content": system_prompt},
          
@@ -32,6 +32,19 @@ def create_exercise(system_prompt: str) -> str:
             "temperature": 0,
         },
     )
+
+    return response.message.content
+
+exercise = create_exercise(
+        """
+        Experience:
+        You are a python master and master trainer with training in cognative behavior, congnative learning methods.
+        Your role is to create python exercises based on the users leve. 
+        """
+    )
+
+print(exercise)
+
 def ask_model(system_prompt: str, user_prompt: str) -> str:
     
     """Send system instructions and user content to the configured model.
